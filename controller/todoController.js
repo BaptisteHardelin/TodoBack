@@ -48,8 +48,25 @@ const createTodo = async (req, res) => {
   }
 };
 
+const updateTodo = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { title, content } = req.body;
+
+    const todoToUpdate = await pool.query(
+      "UPDATE todo SET title=$1, content=$2 WHERE id=$3",
+      [title, content, id]
+    );
+
+    res.json({ updated: "todo update" }).status(200);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   getAllTodos,
   createTodo,
   getOneTodo,
+  updateTodo,
 };

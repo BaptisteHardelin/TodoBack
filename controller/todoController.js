@@ -36,10 +36,10 @@ const getOneTodo = async (req, res) => {
 
 const createTodo = async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, status } = req.body;
     const newTodo = await pool.query(
-      "INSERT INTO todo(title, content) VALUES($1, $2) RETURNING *",
-      [title, content]
+      "INSERT INTO todo(title, content, status) VALUES($1, $2, $3) RETURNING *",
+      [title, content, status]
     );
 
     res.json(newTodo.rows[0]).status(201);
@@ -51,11 +51,11 @@ const createTodo = async (req, res) => {
 const updateTodo = async (req, res) => {
   try {
     const id = req.params.id;
-    const { title, content } = req.body;
+    const { title, content, status } = req.body;
 
     const todoToUpdate = await pool.query(
-      "UPDATE todo SET title=$1, content=$2 WHERE id=$3",
-      [title, content, id]
+      "UPDATE todo SET title=$1, content=$2, status=$3 WHERE id=$4",
+      [title, content, status, id]
     );
 
     res.json({ updated: "todo update" }).status(200);

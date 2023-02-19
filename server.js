@@ -14,9 +14,4 @@ app
   .use(express.urlencoded({ extended: true }));
 
 app.use(todoRoutes);
-
-app.use((req, res) => {
-  res.status(404).json({ error: "page not found" });
-});
-
 app.listen(port, () => console.log(`http://localhost:${port}`));

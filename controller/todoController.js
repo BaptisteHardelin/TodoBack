@@ -10,9 +10,27 @@ const pool = new Pool({
 const getAllTodos = async (req, res) => {
   try {
     const allTodos = await pool.query("SELECT * from todo");
-    return res.json(allTodos.rows).status(201);
+
+    res.json(allTodos.rows).status(201);
   } catch (error) {
-    return console.log(error.message);
+    console.log(error.message);
+  }
+};
+
+const getOneTodo = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const getTodoById = await pool.query("select * from todo where id=$1", [
+      id,
+    ]);
+
+    if (getTodoById.rows.length === 0) {
+      res.status(404).json({ error: "page not found" });
+    }
+
+    res.json(getTodoById.rows).status(200);
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
@@ -23,13 +41,15 @@ const createTodo = async (req, res) => {
       "INSERT INTO todo(title, content) VALUES($1, $2) RETURNING *",
       [title, content]
     );
-    return res.json(newTodo.rows[0]).status(201);
+
+    res.json(newTodo.rows[0]).status(201);
   } catch (error) {
-    return console.log(error.message);
+    console.log(error.message);
   }
 };
 
 module.exports = {
   getAllTodos,
   createTodo,
+  getOneTodo,
 };

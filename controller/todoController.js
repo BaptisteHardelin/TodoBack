@@ -12,13 +12,8 @@ const getAllTodos = async (req, res) => {
     const allTodos = await pool.query("SELECT * from todo");
     return res.json(allTodos.rows).status(201);
   } catch (error) {
-    console.log(error.message);
+    return console.log(error.message);
   }
-
-  /*
-  pool.query("SELECT * from todo", (err, res) => {
-    return result.json({ todo: res.rows });
-  });*/
 };
 
 const createTodo = async (req, res) => {

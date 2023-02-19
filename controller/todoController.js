@@ -64,9 +64,22 @@ const updateTodo = async (req, res) => {
   }
 };
 
+const deleteOneTodo = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const todoToDelete = await pool.query("delete from todo where id=$1", [id]);
+
+    res.json({ deleted: "todo deleted", todoToDelete }).status(200);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   getAllTodos,
   createTodo,
   getOneTodo,
   updateTodo,
+  deleteOneTodo,
 };

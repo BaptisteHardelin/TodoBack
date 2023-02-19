@@ -64,6 +64,22 @@ const updateTodo = async (req, res) => {
   }
 };
 
+const updateStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { status } = req.body;
+
+    const todoStatusUpdate = await pool.query(
+      "UPDATE todo SET status=$1 WHERE id=$2",
+      [status, id]
+    );
+
+    res.json({ updated: "status todo update" }).status(200);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 const deleteOneTodo = async (req, res) => {
   try {
     const id = req.params.id;
@@ -82,4 +98,5 @@ module.exports = {
   getOneTodo,
   updateTodo,
   deleteOneTodo,
+  updateStatus,
 };

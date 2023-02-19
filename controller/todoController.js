@@ -7,18 +7,34 @@ const pool = new Pool({
   connectionString,
 });
 
-const helloDB = (req, result) => {
+const getAllTodos = async (req, res) => {
+  try {
+    const allTodos = await pool.query("SELECT * from todo");
+    return res.json(allTodos.rows).status(201);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  /*
   pool.query("SELECT * from todo", (err, res) => {
-    result.json(res.rows);
-  });
-  pool.end();
+    return result.json({ todo: res.rows });
+  });*/
 };
 
-const helloWorld = (req, res) => {
-  res.json({ hello: "Hello World" });
+const createTodo = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const newTodo = await pool.query(
+      "INSERT INTO todo(title, content) VALUES($1, $2) RETURNING *",
+      [title, content]
+    );
+    return res.json(newTodo.rows[0]).status(201);
+  } catch (error) {
+    return console.log(error.message);
+  }
 };
 
 module.exports = {
-  helloWorld,
-  helloDB,
+  getAllTodos,
+  createTodo,
 };

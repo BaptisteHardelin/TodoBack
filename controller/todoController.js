@@ -36,7 +36,11 @@ const getOneTodo = async (req, res) => {
 
 const createTodo = async (req, res) => {
   try {
-    const { title, content, status } = req.body;
+    let { title, content, status } = req.body;
+    if (status === null || status === "") {
+      console.log("here");
+      status = "todo";
+    }
     const newTodo = await pool.query(
       "INSERT INTO todo(title, content, status) VALUES($1, $2, $3) RETURNING *",
       [title, content, status]

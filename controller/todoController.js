@@ -1,11 +1,5 @@
 require("dotenv").config();
-const { Pool } = require("pg");
-
-const connectionString = `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
-
-const pool = new Pool({
-  connectionString,
-});
+const pool = require("../database/database");
 
 const getAllTodos = async (req, res) => {
   try {

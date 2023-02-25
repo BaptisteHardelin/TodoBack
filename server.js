@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const todoRoutes = require("./routes/todoRoutes");
 const userRoutes = require("./routes/user");
+const auth = require("./middleware/auth");
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -14,7 +15,8 @@ app
   .use(express.json())
   .use(express.urlencoded({ extended: true }));
 
-app.use(todoRoutes);
 app.use("/user", userRoutes);
+app.use(auth);
+app.use(todoRoutes);
 
 app.listen(port, () => console.log(`http://localhost:${port}`));

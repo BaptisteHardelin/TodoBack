@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const client = require("../database/database");
 const jwt = require("jsonwebtoken");
 
+let token;
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -16,10 +18,12 @@ exports.login = async (req, res) => {
       res.status(400).json({ error: "User is not register, signup first" });
     } else {
       bcrypt.compare(password, user[0].password, (err, result) => {
+        console.log("result", result);
         if (err) {
           res.status(500).json({ error: "Server error" });
         } else if (result) {
-          const token = jwt.sign({ email }, process.env.SECRET_KEY);
+          token = jwt.sign({ email }, process.env.SECRET_KEY);
+          console.log("here", token);
           res.status(200).json({ message: "User logged !", token });
         } else {
           if (!result) {
@@ -34,4 +38,8 @@ exports.login = async (req, res) => {
       error: "Database error occurred while signing in!", //Database connection error
     });
   }
+};
+
+exports.getToken = () => {
+  return token;
 };
